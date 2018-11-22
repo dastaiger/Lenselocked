@@ -14,5 +14,9 @@ func main() {
 func handlerFunc(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/html")
 	w.Header().Set("Host", "Wurst")
-	fmt.Fprint(w, "<h1> Welcome to great my Site! </h1>")
+
+	if r.URL.Path == "/contact" {
+		fmt.Fprint(w, "contact me @ <a href=\"mailto:bla@spam.de\"> mailaddr </a>.")
+	}
+	fmt.Fprint(w, "<h1> hiho </h1>")
 }
