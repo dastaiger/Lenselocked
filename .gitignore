@@ -56,3 +56,5 @@ builds/**/images/*
 
 # Anything under a tmp folder
 **/tmp/*
+
+lenslocked.com
