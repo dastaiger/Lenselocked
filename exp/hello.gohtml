@@ -3,4 +3,7 @@ hat nen Hund namens {{.Dog}}. Er ist {{.Alter}} Jahre alt.
 Er ist {{.Doof}}
 Er hat folgende Frauen: {{range $k, $v := .Frauen}} {{$k}} alter:  {{$v}},{{end}}] 
 
-<script>alert('{{.Frauen.Helga}}')</script>
+<script>alert('{{.Frauen.Helga}}')</script>s
+
+
+{{template "footer"}}

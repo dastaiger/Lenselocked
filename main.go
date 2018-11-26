@@ -1,21 +1,26 @@
 package main
 
 import (
-	"fmt"
-	"html/template"
 	"net/http"
 
 	"github.com/gorilla/mux"
+	view "lenslocked.com/views"
 )
 
-var homeTemplate *template.Template
+var (
+	homeTemplate    *view.View
+	contactTemplate *view.View
+)
 
 func main() {
-	var err error
-	homeTemplate, err = template.ParseFiles("views/home.gohtml")
-	if err != nil {
-		panic(err)
-	}
+	//var err error
+	homeTemplate = view.NewView(
+		"views/home.gohtml",
+	)
+
+	contactTemplate = view.NewView(
+		"views/contact.gohtml",
+	)
 	r := mux.NewRouter()
 	r.HandleFunc("/contact", contact)
 	r.HandleFunc("/", home)
@@ -25,13 +30,15 @@ func main() {
 
 func contact(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/html")
-	fmt.Fprint(w, "contact me @ <a href=\"mailto:bla@spam.de\"> mailaddr </a>.")
+	if err := contactTemplate.Template.Execute(w, nil); err != nil {
+		panic(err)
+	}
 
 }
 
 func home(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/html")
-	if err := homeTemplate.Execute(w, nil); err != nil {
+	if err := homeTemplate.Template.Execute(w, nil); err != nil {
 		panic(err)
 	}
 }
