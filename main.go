@@ -4,7 +4,7 @@ import (
 	"net/http"
 
 	"github.com/gorilla/mux"
-	view "lenslocked.com/views"
+	"lenslocked.com/views"
 )
 
 var (
@@ -30,7 +30,7 @@ func main() {
 
 func contact(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/html")
-	if err := contactTemplate.Template.Execute(w, nil); err != nil {
+	if err := contactTemplate.Template.ExecuteTemplate(w, "yield", nil); err != nil {
 		panic(err)
 	}
 
@@ -38,7 +38,8 @@ func contact(w http.ResponseWriter, r *http.Request) {
 
 func home(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/html")
-	if err := homeTemplate.Template.Execute(w, nil); err != nil {
+	if err := homeTemplate.Template.ExecuteTemplate(w, "yield", nil); err != nil {
+
 		panic(err)
 	}
 }
