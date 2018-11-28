@@ -14,11 +14,11 @@ var (
 
 func main() {
 	//var err error
-	homeTemplate = view.NewView(
+	homeTemplate = view.NewView("bootstrap",
 		"views/home.gohtml",
 	)
 
-	contactTemplate = view.NewView(
+	contactTemplate = view.NewView("bootstrap",
 		"views/contact.gohtml",
 	)
 	r := mux.NewRouter()
@@ -30,7 +30,7 @@ func main() {
 
 func contact(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/html")
-	if err := contactTemplate.Template.ExecuteTemplate(w, "yield", nil); err != nil {
+	if err := contactTemplate.Template.ExecuteTemplate(w, contactTemplate.Layout, nil); err != nil {
 		panic(err)
 	}
 
@@ -38,8 +38,7 @@ func contact(w http.ResponseWriter, r *http.Request) {
 
 func home(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/html")
-	if err := homeTemplate.Template.ExecuteTemplate(w, "yield", nil); err != nil {
-
+	if err := homeTemplate.Template.ExecuteTemplate(w, homeTemplate.Layout, nil); err != nil {
 		panic(err)
 	}
 }

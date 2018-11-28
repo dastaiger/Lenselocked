@@ -2,7 +2,7 @@ package view
 
 import "html/template"
 
-func NewView(files ...string) *View {
+func NewView(layout string, files ...string) *View {
 	files = append(files,
 		"views/layouts/footer.gohtml",
 		"views/layouts/bootstrap.gohtml")
@@ -13,11 +13,13 @@ func NewView(files ...string) *View {
 	}
 
 	v := View{
-		Template: t}
+		Template: t,
+		Layout:   layout}
 	return &v
 }
 
 //View is a view for templates
 type View struct {
 	Template *template.Template
+	Layout   string
 }
