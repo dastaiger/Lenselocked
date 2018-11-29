@@ -29,16 +29,10 @@ func main() {
 }
 
 func contact(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "text/html")
-	if err := contactTemplate.Template.ExecuteTemplate(w, contactTemplate.Layout, nil); err != nil {
-		panic(err)
-	}
+	contactTemplate.Render(w, nil)
 
 }
 
 func home(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "text/html")
-	if err := homeTemplate.Template.ExecuteTemplate(w, homeTemplate.Layout, nil); err != nil {
-		panic(err)
-	}
+	homeTemplate.Render(w, nil)
 }
