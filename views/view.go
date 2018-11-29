@@ -43,7 +43,7 @@ func listFilenames() []string {
 }
 
 //Render calls ExecuteTemplate on the View and sets the correct Content-Type
-func (v View) Render(w http.ResponseWriter, data interface{}) {
+func (v *View) Render(w http.ResponseWriter, data interface{}) {
 	w.Header().Set("Content-Type", "text/html")
 	handleErr(v.Template.ExecuteTemplate(w, v.Layout, data))
 }
