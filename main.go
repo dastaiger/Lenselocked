@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/gorilla/mux"
+	"lenslocked.com/controllers"
 	"lenslocked.com/views"
 )
 
@@ -15,21 +16,16 @@ var (
 
 func main() {
 	//var err error
-	homeTemplate = view.NewView("cover",
-		"views/home.gohtml",
-	)
+	homeTemplate = view.NewView("cover", "views/home.gohtml")
+	contactTemplate = view.NewView("bootstrap", "views/contact.gohtml")
+	faqTemplate = view.NewView("bootstrap", "views/faq.gohtml")
+	usersC := controllers.NewUsers()
 
-	contactTemplate = view.NewView("bootstrap",
-		"views/contact.gohtml",
-	)
-
-	faqTemplate = view.NewView("bootstrap",
-		"views/faq.gohtml",
-	)
 	r := mux.NewRouter()
 	r.HandleFunc("/contact", contact)
 	r.HandleFunc("/", home)
 	r.HandleFunc("/faq", faq)
+	r.HandleFunc("/signup", usersC.New)
 	http.ListenAndServe(":3000", r) //nil = use buildin MUX
 
 }
