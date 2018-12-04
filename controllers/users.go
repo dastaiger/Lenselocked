@@ -41,14 +41,10 @@ func (u *Users) New(w http.ResponseWriter, r *http.Request) {
 // /Signup POST
 func (u *Users) Create(w http.ResponseWriter, r *http.Request) {
 
-	if err := r.ParseForm(); err != nil {
-		panic(err)
-	}
-
 	var user SignUp
-	if err := decoder.Decode(&user, r.PostForm); err != nil {
+
+	if err := ParseForm(r, &user); err != nil {
 		panic(err)
 	}
-
 	fmt.Fprintf(w, "this is a Temp Mesage: %v, %v \n %v", r.PostFormValue("email"), r.PostFormValue("Password"), user)
 }
