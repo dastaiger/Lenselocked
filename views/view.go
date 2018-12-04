@@ -8,11 +8,18 @@ import (
 
 var (
 	layoutPath  = "views/layouts/"
+	staticPath  = "views/"
 	templateExt = ".gohtml"
 )
 
+func (v *View) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	v.Render(w, nil)
+}
+
 //NewView provides a template with all the files included in the LAYOUTPATH
 func NewView(layout string, files ...string) *View {
+	appendExt(files)
+	prependPath(files)
 	files = append(files, listFilenames()...)
 
 	t, err := template.ParseFiles(files...)
@@ -51,5 +58,23 @@ func (v *View) Render(w http.ResponseWriter, data interface{}) {
 func handleErr(e error) {
 	if e != nil {
 		panic(e)
+	}
+}
+
+//prependPath prepends the <staticPath> to the input files provided
+//
+//eg "home" would become "views/static/home" if <staticPath> = "views/static"
+func prependPath(files []string) {
+	for i, f := range files {
+		files[i] = staticPath + f
+	}
+}
+
+//appendExt appends the <templateExt> to the input files provided
+//
+//eg "home" would become "home.gohtml" if <templateExt> = ".gohtml"
+func appendExt(files []string) {
+	for i, f := range files {
+		files[i] = f + templateExt
 	}
 }

@@ -24,7 +24,7 @@ type SignUp struct {
 //NewUsers can panic -> only use this function during setup
 func NewUsers() *Users {
 	return &Users{
-		NewView: view.NewView("bootstrap", "views/users/new.gohtml"),
+		NewView: view.NewView("bootstrap", "users/new"),
 	}
 }
 
