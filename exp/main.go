@@ -1,35 +1,71 @@
 package main
 
 import (
-	"html/template"
-	"os"
+	"fmt"
+
+	"github.com/jinzhu/gorm"
+	_ "github.com/jinzhu/gorm/dialects/postgres"
 )
 
-type user struct {
+type Product struct {
+	gorm.Model
+	UserID uint
 	Name   string
-	Dog    string
-	Alter  int
-	Doof   bool
-	Frauen map[string]int
+	Price  uint
 }
+
+type User struct {
+	gorm.Model
+	Name  string
+	Email string `gorm:"unique_index;not null"`
+	Color string
+	Order []Product
+}
+
+const (
+	host     = "localhost"
+	port     = 5432
+	user     = "postgres"
+	password = "postgres"
+	dbname   = "lenslocked"
+)
 
 func main() {
 
-	t, err := template.ParseFiles("hello.gohtml")
+	connStr := fmt.Sprintf("host=%s user=%s port=%v dbname=%s password=%s sslmode=disable", host, user, port, dbname, password)
+	db, err := gorm.Open("postgres", connStr)
 	if err != nil {
 		panic(err)
 	}
+	defer db.Close()
+	db.LogMode(true)
+	u := []User{}
+	// db.Where("Name LIKE ?", "%Bort%").Find(&u)
 
-	data := user{
-		Name:   "WurstMann",
-		Dog:    "Bello",
-		Alter:  25,
-		Doof:   true,
-		Frauen: map[string]int{"Helga": 20, "lola": 30},
-	}
+	// p := Product{
+	// 	UserID: u[0].ID,
+	// 	Name:   "Haus",
+	// 	Price:  120215412,
+	// }
+	// db.Where("Name LIKE ?", "%Borg%").Find(&u)
+	// p1 := Product{
+	// 	UserID: u[0].ID,
+	// 	Name:   "Tier",
+	// 	Price:  125214,
+	// }
+	// db.Create(&p)
+	// db.Create(&p1)
+	db.AutoMigrate(&User{}, &Product{})
+	//db.Set("gorm:auto_preload", true).Find(&User{})
 
-	err = t.Execute(os.Stdout, data)
-	if err != nil {
-		panic(err)
+	if err := db.Preload("Order").Find(&u).Error; err != nil {
+		switch err {
+		case gorm.ErrRecordNotFound:
+			fmt.Println("Record not Found!")
+
+		}
 	}
+	var results []User
+	db.Raw("SELECT * FROM users").Scan(&results)
+	fmt.Printf("%v", results)
 }
