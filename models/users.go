@@ -69,6 +69,11 @@ func NewUserService(connectionString string) (*UserService, error) {
 //Destrcution will drop the table if it exists and then AutoMigrate the clear DB
 func (us *UserService) Destrcution() {
 	us.db.DropTableIfExists(&User{})
+	us.AutoMigrate()
+}
+
+//AutoMigrate will AutoMigrate the Users Table into the DB
+func (us *UserService) AutoMigrate() {
 	us.db.AutoMigrate(&User{})
 }
 
@@ -80,6 +85,11 @@ func (us *UserService) Create(user *User) error {
 //Update will Update the Information of an user
 func (us *UserService) Update(user *User) error {
 	return us.db.Save(user).Error
+}
+
+//Close will Close the DB connection
+func (us *UserService) Close() error {
+	return us.db.Close()
 }
 
 //Delete will delete the an user
